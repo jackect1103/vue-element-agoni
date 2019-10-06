@@ -187,7 +187,7 @@ export default {
       this.showPagination(val);
       console.log(`当前页: ${val} ${this.currentPage}`);
     },
-    // 切换页
+    // 页面数范围
     showPagination(curPage) {
       this.tableData = [];
       var bgLen = this.bgDate.length;
@@ -205,14 +205,19 @@ export default {
     },
     // 删除
     handleDelete(id) {
-      this.bgDate = this.bgDate.filter(item => {
-        if (item.id == id) {
-          this.bgDate.splice(id, 1);
-          this.showPagination(this.currentPage);
-          return false;
+      var newArray = [];
+      // 使用array过滤方法
+      newArray = this.bgDate.filter(item => {
+        if (item.id != id) {
+          return item;
         }
-        return true;
       });
+      this.bgDate = newArray;
+      this.showPagination(this.currentPage);
+      // 判断页面的数据是否没有，如果没有就自动跳转到前一页
+      if (Math.ceil(newArray.length / this.sizeChange) != this.currentPage) {
+        this.handleCurrentChange(this.currentPage - 1);
+      }
     },
     // 弹出框
     open(index, row) {
@@ -223,13 +228,10 @@ export default {
       })
         .then(() => {
           this.handleDelete(row.id);
-          console.log("1");
           this.$message({
             type: "success",
             message: "删除成功!"
           });
-
-          console.log(index);
         })
         .catch(() => {
           this.$message({
