@@ -173,7 +173,11 @@ export default {
       this.curDate = newArray;
       this.showPagination(this.currentPage);
       // 判断页面的数据是否没有，如果没有就自动跳转到前一页
-      if (Math.ceil(newArray.length / this.sizeChange) != this.currentPage) {
+      if (
+        Math.ceil(newArray.length / this.sizeChange) != this.currentPage &&
+        this.currentPage != 1
+      ) {
+        console.log(this.currentPage);
         this.handleCurrentChange(this.currentPage - 1);
       }
     },
@@ -213,5 +217,8 @@ export default {
   margin-right: 0;
   margin-bottom: 0;
   width: 50%;
+}
+.block {
+  margin-top: 25px;
 }
 </style>

@@ -36,7 +36,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[3, 4, 5, 6]"
+        :page-sizes="[2,3, 4, 5, 6]"
         :page-size="sizeChange"
         layout="total, sizes, prev, pager, next, jumper"
         :total="bgDate.length"
@@ -215,7 +215,10 @@ export default {
       this.bgDate = newArray;
       this.showPagination(this.currentPage);
       // 判断页面的数据是否没有，如果没有就自动跳转到前一页
-      if (Math.ceil(newArray.length / this.sizeChange) != this.currentPage) {
+      if (
+        Math.ceil(newArray.length / this.sizeChange) != this.currentPage &&
+        this.currentPage != 1
+      ) {
         this.handleCurrentChange(this.currentPage - 1);
       }
     },

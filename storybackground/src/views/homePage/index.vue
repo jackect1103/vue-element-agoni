@@ -37,8 +37,9 @@ export default {
 .el-aside {
   color: #333;
   text-align: center;
-  line-height: 200px;
-  min-height: 100%;
+}
+.el-menu{
+  height: 100%;
 }
 
 .el-main {
