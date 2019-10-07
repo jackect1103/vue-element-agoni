@@ -13,7 +13,7 @@ export default new Router({
       children: [
         {
           path: 'dataAnalysis',
-          component: () => import('@/components/dataAnalysis'),
+          // component: () => import('@/components/dataAnalysis'),
         },
         {
           path: 'showStory',

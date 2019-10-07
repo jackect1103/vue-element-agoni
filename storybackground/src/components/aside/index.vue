@@ -28,13 +28,8 @@
         <i class="iconfont icon-tianjiaadd143"></i>
         <router-link tag="span" to="/addArticle">添加文章</router-link>
       </el-menu-item>
-      <!-- 修改文章 -->
-      <el-menu-item index="6">
-        <i class="iconfont icon-modify"></i>
-        <router-link tag="span" to="/updateArticle">修改文章</router-link>
-      </el-menu-item>
       <!-- 展示所有用户 -->
-      <el-menu-item index="7">
+      <el-menu-item index="6">
         <i class="iconfont icon-UserSettings"></i>
         <router-link tag="span" to="/user">展示所有用户</router-link>
       </el-menu-item>

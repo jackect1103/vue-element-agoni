@@ -201,7 +201,12 @@ export default {
     },
     // 编辑
     handleEdit(index, row) {
-      this.$router.push("/updateArticle");
+      this.$router.push({
+        path: "/updateArticle",
+        query: {
+          date:row
+        }
+      });
     },
     // 删除
     handleDelete(id) {

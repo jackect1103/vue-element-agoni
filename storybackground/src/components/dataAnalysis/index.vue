@@ -36,30 +36,66 @@ export default {
   data() {
     return {
       date: "",
-      categoryDate: [
-        { value: 335, name: "玄幻" },
-        { value: 310, name: "都市" },
-        { value: 274, name: "武侠" },
-        { value: 235, name: "文学" },
-        { value: 400, name: "穿越" },
-        { value: 274, name: "悬疑" },
-        { value: 235, name: "历史" },
-        { value: 400, name: "游戏" }
-      ],
-      genderDate: [{ value: 335, name: "男孩" }, { value: 310, name: "女孩" }],
-      ageDate: [
-        { value: 335, name: "00" },
-        { value: 450, name: "90" },
-        { value: 335, name: "80" },
-        { value: 192, name: "70" },
-        { value: 335, name: "60" },
-        { value: 174, name: "50" }
-      ]
+      genderDate: {
+        showDate: [{ value: 335, name: "男孩" }, { value: 310, name: "女孩" }],
+        title: "按男女分类"
+      },
+      ageDate: {
+        showDate: [
+          { value: 335, name: "00" },
+          { value: 450, name: "90" },
+          { value: 335, name: "80" },
+          { value: 192, name: "70" },
+          { value: 335, name: "60" },
+          { value: 174, name: "50" }
+        ],
+        title: "小说读者年龄段"
+      },
+      categoryDate: {
+        showDate: [
+          { value: 335, name: "玄幻" },
+          { value: 310, name: "都市" },
+          { value: 274, name: "武侠" },
+          { value: 235, name: "文学" },
+          { value: 400, name: "穿越" },
+          { value: 274, name: "悬疑" },
+          { value: 235, name: "历史" },
+          { value: 400, name: "游戏" }
+        ],
+        title: "小说类别"
+      }
     };
   },
   mounted() {
     this.nowDate();
-    this.drawLine();
+    // 基于准备好的dom，初始化echarts实例
+    /**
+     * 由于一个组件加载多个echarts会导致加载速度慢甚至浏览器崩溃
+     * 所以在获取到数据之前，先执行loading方法
+     * 参考资料
+     * eg：https://www.wandouip.com/t5i143248/
+     */
+    // this.myChart = this.$echarts.init(document.getElementById("category"));
+    // this.gender = this.$echarts.init(document.getElementById("gender"));
+    // this.age = this.$echarts.init(document.getElementById("age"));
+    // this.loading;
+    // this.initDrawDevEchart;
+  },
+  computed: {
+    initDrawDevEchart() {
+      this.myChart.hideLoading();
+      // this.gendere.hideLoading();
+      this.setOption(this.myChart, this.categoryDate);
+      // this.setOption(this.gendere, this.genderDate);
+    },
+    // 当数据还没收到时执行加载方法
+    loading: {
+      get: function() {
+        this.setOption(this.myChart);
+        // this.setOption(this.gendere);
+      },
+      set(e) {}
+    }
   },
   methods: {
     //  显示当前时间
@@ -78,18 +114,12 @@ export default {
       this.date = year + "-" + month + "-" + day + " " + h + ":" + m + ":" + d;
       setInterval(this.nowDate, 1000);
     },
-    // 显示饼图
-    drawLine() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = this.$echarts.init(document.getElementById("category"));
-      let gender = this.$echarts.init(document.getElementById("gender"));
-      let age = this.$echarts.init(document.getElementById("age"));
-
-      // 绘制category图表
-      myChart.setOption({
+    // 设置数据
+    setOption(obj, allDate = {}) {
+      obj.setOption({
         backgroundColor: "#2c343c",
         title: {
-          text: "小说类型",
+          text: allDate.title,
           left: "center",
           top: 20,
           textStyle: {
@@ -114,9 +144,7 @@ export default {
             type: "pie",
             radius: "55%",
             center: ["50%", "50%"],
-            data: this.categoryDate.sort(function(a, b) {
-              return a.value - b.value;
-            }),
+            data: allDate.showDate,
             roseType: "radius",
             label: {
               normal: {
@@ -147,171 +175,17 @@ export default {
                   var colorList = [
                     "pink",
                     "purple",
-                    "#FFFF00",
-                    "#FF8C00",
-                    "#FF0000",
-                    "#FE8463",
-                    "blue",
-                    "skyblue"
-                  ];
-                  return colorList[params.dataIndex];
-                }
-              }
-            },
-
-            animationType: "scale",
-            animationEasing: "elasticOut",
-            animationDelay: function(idx) {
-              return Math.random() * 200;
-            }
-          }
-        ]
-      });
-      // 绘制gender图表
-      gender.setOption({
-        backgroundColor: "#2c343c",
-        title: {
-          text: "小说适合读者的书籍",
-          left: "center",
-          top: 20,
-          textStyle: {
-            color: "#ccc"
-          }
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        visualMap: {
-          show: false,
-          min: 80,
-          max: 600,
-          inRange: {
-            colorLightness: [0, 1]
-          }
-        },
-        series: [
-          {
-            name: "访问来源:后台数据",
-            type: "pie",
-            radius: "55%",
-            center: ["50%", "50%"],
-            data: this.genderDate.sort(function(a, b) {
-              return a.value - b.value;
-            }),
-            roseType: "radius",
-            label: {
-              normal: {
-                textStyle: {
-                  color: "#fff"
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                lineStyle: {
-                  color: "#fff"
-                },
-                smooth: 0.2,
-                length: 10,
-                length2: 20
-              }
-            },
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              },
-              normal: {
-                color: function(params) {
-                  //自定义颜色
-                  var colorList = ["pink", "skyblue"];
-                  return colorList[params.dataIndex];
-                }
-              }
-            },
-
-            animationType: "scale",
-            animationEasing: "elasticOut",
-            animationDelay: function(idx) {
-              return Math.random() * 200;
-            }
-          }
-        ]
-      });
-      // 绘制age图表
-      age.setOption({
-        backgroundColor: "#2c343c",
-        title: {
-          text: "读者年龄段",
-          left: "center",
-          top: 20,
-          textStyle: {
-            color: "#ccc"
-          }
-        },
-        tooltip: {
-          trigger: "item",
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-        },
-        visualMap: {
-          show: false,
-          min: 80,
-          max: 600,
-          inRange: {
-            colorLightness: [0, 1]
-          }
-        },
-        series: [
-          {
-            name: "访问来源:后台数据",
-            type: "pie",
-            radius: "55%",
-            center: ["50%", "50%"],
-            data: this.ageDate.sort(function(a, b) {
-              return a.value - b.value;
-            }),
-            roseType: "radius",
-            label: {
-              normal: {
-                textStyle: {
-                  color: "#fff"
-                }
-              }
-            },
-            labelLine: {
-              normal: {
-                lineStyle: {
-                  color: "#fff"
-                },
-                smooth: 0.2,
-                length: 10,
-                length2: 20
-              }
-            },
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: "rgba(0, 0, 0, 0.5)"
-              },
-              normal: {
-                color: function(params) {
-                  //自定义颜色
-                  var colorList = [
-                    "pink",
-                    "skyblue",
-                    "purple",
-                    "blue",
                     "#fda100",
-                    "#fda152"
+                    "skyblue",
+                    "blue",
+                    "#67C23A",
+                    "#E6A23C",
+                    "#F56C6C"
                   ];
                   return colorList[params.dataIndex];
                 }
               }
             },
-
             animationType: "scale",
             animationEasing: "elasticOut",
             animationDelay: function(idx) {
@@ -319,6 +193,11 @@ export default {
             }
           }
         ]
+      });
+      obj.showLoading({
+        text: "统计中，请稍候...",
+        maskColor: "rgba(3,3,8,0.5)",
+        textColor: "#fff"
       });
     }
   }

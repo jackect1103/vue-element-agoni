@@ -4,6 +4,9 @@ import router from '@/routers'
 import store from '@/stores'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import axios from 'axios'
+
+Vue.prototype.$axios = axios;
 
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts
