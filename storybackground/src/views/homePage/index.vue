@@ -1,12 +1,29 @@
 <template>
-  <el-container>
-    <el-header>Agoni小说网站后台，欢迎：Agoni</el-header>
-    <el-container>
-      <el-aside width="200px">
+  <el-container style="height: 650px;">
+    <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
+      <el-menu>
         <AsideBg />
-      </el-aside>
+      </el-menu>
+    </el-aside>
+
+    <el-container>
+      <el-header style="text-align: right;">
+        <span style="float:left;">欢迎来到agoni小说网后台</span>
+        <el-dropdown>
+          <i class="el-icon-setting" style="margin-right: 15px;color:#fff"></i>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item>查看</el-dropdown-item>
+            <el-dropdown-item>新增</el-dropdown-item>
+            <el-dropdown-item>删除</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+        <span>王小虎</span>
+      </el-header>
+
       <el-main>
-          <router-view></router-view> 
+        <transition name="el-fade-in-linear">
+          <router-view></router-view>
+        </transition>
       </el-main>
     </el-container>
   </el-container>
@@ -21,43 +38,21 @@ export default {
   },
   data() {
     return {};
-  },
+  }
 };
 </script>
-<style lang='css' scoped>
+<style scoped>
 .el-header {
-  background-color: #333;
-  color: #333;
-  padding-left: 5% !important;
-  box-sizing: border-box;
-  line-height: 60px;
+  background-color: #303133;
   color: #fff;
+  line-height: 60px;
+  font-size: 16px !important;
 }
 
 .el-aside {
   color: #333;
-  text-align: center;
 }
-.el-menu{
+.el-menu {
   height: 100%;
-}
-
-.el-main {
-  background-color: #E5E5E5;
-  color: #333;
-  text-align: center;
-}
-
-body > .el-container {
-  margin-bottom: 40px;
-}
-
-.el-container:nth-child(5) .el-aside,
-.el-container:nth-child(6) .el-aside {
-  line-height: 260px;
-}
-
-.el-container:nth-child(7) .el-aside {
-  line-height: 320px;
 }
 </style>

@@ -12,6 +12,10 @@ export default new Router({
       component: () => import('@/views/homePage'),
       children: [
         {
+          path: 'dataAnalysis',
+          component: () => import('@/components/dataAnalysis'),
+        },
+        {
           path: 'showStory',
           component: () => import('@/components/story'),
         },
@@ -38,7 +42,7 @@ export default new Router({
         {
           // 路由错误是跳转到该路由
           path: '/',
-          redirect: '/showStory'
+          redirect: '/dataAnalysis'
         }
       ]
     },
