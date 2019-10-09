@@ -8,8 +8,8 @@ import axios from 'axios'
 
 Vue.prototype.$axios = axios;
 
-import echarts from 'echarts'
-Vue.prototype.$echarts = echarts
+// import echarts from 'echarts'
+// Vue.prototype.$echarts = echarts
 
 Vue.use(ElementUI);
 Vue.config.productionTip = false

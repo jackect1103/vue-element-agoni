@@ -9,6 +9,18 @@ export default new Router({
   routes: [
     {
       path: '/',
+      redirect: '/login'
+    },
+    {
+      path: '/login',
+      component: () => import('@/views/login')
+    },
+    {
+      path: '/register',
+      component: () => import('@/views/register')
+    },
+    {
+      path: '/',
       component: () => import('@/views/homePage'),
       children: [
         {
@@ -40,16 +52,10 @@ export default new Router({
           component: () => import('@/components/user'),
         },
         {
-          // 路由错误是跳转到该路由
           path: '/',
-          redirect: '/dataAnalysis'
+          redirect: '/showStroy'
         }
       ]
-    },
-    {
-      // 路由错误是跳转到该路由
-      path: '/',
-      redirect: '/showStory'
     },
     {
       // 路由错误是跳转到该路由
