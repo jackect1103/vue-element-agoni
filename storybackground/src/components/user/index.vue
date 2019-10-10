@@ -1,51 +1,80 @@
 <template>
-  <el-table :data="tableData" style="width: 100%">
-    <el-table-column prop="id" label="编号" width="180"></el-table-column>
-    <el-table-column prop="userName" label="姓名" width="180"></el-table-column>
-    <el-table-column prop="gender" label="性别"></el-table-column>
-    <el-table-column prop="birthday" label="出生日期" width="180"></el-table-column>
-    <el-table-column prop="createDate" label="注册时间"></el-table-column>
+  <div>
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column prop="id" label="编号" width="180"></el-table-column>
+      <el-table-column prop="userName" label="姓名" width="180"></el-table-column>
+      <el-table-column prop="gender" label="性别"></el-table-column>
+      <el-table-column prop="birthday" label="出生日期" width="180"></el-table-column>
+      <el-table-column prop="createDate" label="注册时间"></el-table-column>
 
-    <el-table-column fixed="right" label="操作" width="200">
-      <template>
-        <el-button>未冻结</el-button>
-        <el-button>删除</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column fixed="right" label="操作" width="200">
+        <template slot-scope="scope">
+          <el-button type="warning" @click="freeze(scope.$index, scope.row)">未冻结</el-button>
+          <el-button type="danger" @click="open(scope.$index, scope.row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <!-- 分页 -->
+    <pagination :pagesizes='[2,3,4,5]' :dateSource='bgDate' @showDate='showDate'/>
+  </div>
 </template>
 
 
 <script>
+import pagination from '@/components/pagination'
 export default {
   name: "user",
-  components: {},
+  components: {
+    pagination
+  },
   data() {
     return {
-      tableData: [
+      tableData: [],
+      bgDate: [
         {
-          id: "1730316",
+          id: "01",
+          userName: "jackect",
+          gender: "男",
+          birthday: "2000-1-1",
+          createDate: new Date().toLocaleString()
+        },
+        {
+          id: "02",
+          userName: "rain",
+          gender: "男",
+          birthday: "2000-1-1",
+          createDate: new Date().toLocaleString()
+        },
+        {
+          id: "03",
           userName: "agoni",
           gender: "男",
           birthday: "2000-1-1",
           createDate: new Date().toLocaleString()
-        },{
-          id: "1730316",
-          userName: "agoni",
+        },
+        {
+          id: "04",
+          userName: "jack",
           gender: "男",
           birthday: "2000-1-1",
           createDate: new Date().toLocaleString()
-        },{
-          id: "1730316",
+        },
+        {
+          id: "05",
           userName: "agoni",
           gender: "男",
           birthday: "2000-1-1",
           createDate: new Date().toLocaleString()
         }
-      ]
+      ],
+      
     };
-  },
+  },methods: {
+    showDate(response){
+      this.tableData = response
+    }
+  }
 };
 </script>
-<style lang='' scoped>
+<style lang='css' scoped>
 </style>

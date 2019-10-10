@@ -31,6 +31,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
     <div class="block">
       <el-pagination
         @size-change="handleSizeChange"

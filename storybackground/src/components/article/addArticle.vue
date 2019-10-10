@@ -11,17 +11,33 @@
       <el-input v-model="ruleForm.title"></el-input>
     </el-form-item>
     <!-- 文章图片 -->
-    <el-form-item label="文章图片" prop="imageUrl">
+    <el-form-item label="文章图片">
       <el-upload
-        class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
+        action="#"
+        list-type="picture-card"
+        :auto-upload="false"
+        :limit="1"
+        :on-remove='handleRemove'
+        :on-change="handleAvatarupload"
       >
-        <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar" />
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        <i slot="default" class="el-icon-plus"></i>
+        <div slot="file" slot-scope="{file}">
+          <img class="el-upload-list__item-thumbnail" :src="ruleForm.imageUrl" alt />
+          <span class="el-upload-list__item-actions">
+            <!-- 放大 -->
+            <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
+              <i class="el-icon-zoom-in"></i>
+            </span>
+            <!-- 删除 -->
+            <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
+              <i class="el-icon-delete"></i>
+            </span>
+          </span>
+        </div>
       </el-upload>
+      <el-dialog :visible.sync="dialogVisible">
+        <img width="100%" :src="ruleForm.imageUrl" alt />
+      </el-dialog>
     </el-form-item>
     <!-- 文章类别 -->
     <el-form-item label="文章类别" prop="chapter">
@@ -53,6 +69,7 @@
 <script>
 export default {
   name: "addArticle",
+  props: ["limit"],
   data() {
     return {
       // 存储数据
@@ -86,7 +103,9 @@ export default {
           { min: 1, max: 8, message: "长度在 1 到 8 个字符", trigger: "blur" }
         ],
         intro: [{ required: true, message: "请填写文章简介", trigger: "blur" }]
-      }
+      },
+      dialogVisible: false,
+      disabled: false
     };
   },
   methods: {
@@ -105,22 +124,15 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    // 获取图片
-    handleAvatarSuccess(res, file) {
-      this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
+    handleRemove(file, fileList) {
+      this.ruleForm.imageUrl = '';
     },
-    // 图片大小及限制图片大小
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
+    handlePictureCardPreview(file) {
+      this.ruleForm.imageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    handleAvatarupload(file) {
+      this.ruleForm.imageUrl = file.url;
     }
   }
 };
