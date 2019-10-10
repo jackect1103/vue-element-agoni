@@ -6,6 +6,9 @@
           <h1>Your Login</h1>
           <p>One needs 3 things to be truly happy living in the world: some thing to do, some one to love, some thing to hope for.</p>
           <p>No matter how bad your heart has been broken, the world doesn’t stop for your grief. The sun comes right back up the next day.</p>
+          <el-button type="info">
+            <router-link to='/register' tag="span">Creat New Acount</router-link>
+          </el-button>
         </div>
       </el-col>
       <el-col :span="8" >
@@ -89,7 +92,7 @@ input{
   margin-bottom:40px;
 }
 .left{
-  margin-top:-30px;
+  margin-top:-65px;
 }
 .left h1{
   margin-bottom:15px;

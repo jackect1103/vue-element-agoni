@@ -1,12 +1,12 @@
 <template>
-  <el-menu default-active="1" background-color="#545c64" text-color="#fff">
+  <el-menu default-active="2" background-color="#545c64" text-color="#fff">
     <!-- 使用<el-scrollbar>来设置滚动条 -->
     <el-scrollbar style="height:100%">
       <!-- 数据分析 -->
-      <el-menu-item index="1">
+      <!-- <el-menu-item index="1">
         <i class="iconfont icon-data"></i>
         <router-link tag="span" to="/dataAnalysis">数据分析</router-link>
-      </el-menu-item>
+      </el-menu-item> -->
       <!-- 展示所有小说 -->
       <el-menu-item index="2">
         <i class="iconfont icon-tubiao1shuxiaoshuo"></i>

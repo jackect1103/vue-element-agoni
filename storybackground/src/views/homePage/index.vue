@@ -12,12 +12,13 @@
         <el-dropdown>
           <i class="el-icon-setting" style="margin-right: 15px;color:#fff"></i>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>查看</el-dropdown-item>
-            <el-dropdown-item>新增</el-dropdown-item>
-            <el-dropdown-item>删除</el-dropdown-item>
+            <el-dropdown-item>
+              <router-link to="/personalAcount" tag="span">个人中心</router-link>
+            </el-dropdown-item>
+            <el-dropdown-item>退出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span>王小虎</span>
+        <span>Agoni</span>
       </el-header>
 
       <el-main>

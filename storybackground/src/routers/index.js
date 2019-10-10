@@ -24,8 +24,8 @@ export default new Router({
       component: () => import('@/views/homePage'),
       children: [
         {
-          path: 'dataAnalysis',
-          // component: () => import('@/components/dataAnalysis'),
+          path: 'personalAcount',
+          component: () => import('@/components/personalAcount'),
         },
         {
           path: 'showStory',
