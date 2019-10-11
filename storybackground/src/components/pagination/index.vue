@@ -26,7 +26,7 @@ export default {
     return {
       tableData: [], //存取组件渲染的数据
       bgDate: this.dateSource, //存取数据源
-      //每页条数
+      //默认每页条数
       sizeChange: 3,
       // 当前页数，支持 .sync 修饰符
       currentPage: 1,
@@ -60,9 +60,10 @@ export default {
           this.tableData.push(this.bgDate[i]);
         }
       }
+      // 触发父组件的方法
       this.$emit('showDate', this.tableData)
     },
-    // 删除
+    // 删除item项
     handleDelete(id) {
       var newArray = [];
       // 使用array过滤方法
@@ -86,27 +87,6 @@ export default {
       ) {
         this.handleCurrentChange(this.currentPage - 1);
       }
-    }, // 弹出框
-    open(index, row) {
-      this.$confirm("此操作将永久删除此数据, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          console.log(row.id);
-          this.handleDelete(row.id);
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
     }
   }
 };

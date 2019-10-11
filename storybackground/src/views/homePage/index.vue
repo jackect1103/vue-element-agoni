@@ -15,7 +15,9 @@
             <el-dropdown-item>
               <router-link to="/personalAcount" tag="span">个人中心</router-link>
             </el-dropdown-item>
-            <el-dropdown-item>退出</el-dropdown-item>
+            <el-dropdown-item  @click.native="logout">
+              <span>退出</span>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         <span>Agoni</span>
@@ -39,6 +41,13 @@ export default {
   },
   data() {
     return {};
+  },
+  methods: {
+    logout() {
+      this.$router.push({
+        path: "/login"
+      });
+    }
   }
 };
 </script>
@@ -55,5 +64,11 @@ export default {
 }
 .el-menu {
   height: 100%;
+}
+.el-dropdown-menu__item span{
+  display:inline-block;
+  width:100%;
+  height: inherit;
+  text-align: center;
 }
 </style>

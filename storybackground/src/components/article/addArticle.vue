@@ -11,33 +11,21 @@
       <el-input v-model="ruleForm.title"></el-input>
     </el-form-item>
     <!-- 文章图片 -->
-    <el-form-item label="文章图片">
+    <el-form-item label="文章图片:">
+      <el-input v-model="ruleForm.imageUrl" v-if="false"></el-input>
       <el-upload
-        action="#"
-        list-type="picture-card"
+        class="avatar-uploader"
+        ref="upload"
+        :show-file-list="false"
+        action="/index/upload"
+        :before-upload="beforeUpload"
+        :on-change="handleChange"
         :auto-upload="false"
-        :limit="1"
-        :on-remove='handleRemove'
-        :on-change="handleAvatarupload"
+        :data="ruleForm"
       >
-        <i slot="default" class="el-icon-plus"></i>
-        <div slot="file" slot-scope="{file}">
-          <img class="el-upload-list__item-thumbnail" :src="ruleForm.imageUrl" alt />
-          <span class="el-upload-list__item-actions">
-            <!-- 放大 -->
-            <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-              <i class="el-icon-zoom-in"></i>
-            </span>
-            <!-- 删除 -->
-            <span v-if="!disabled" class="el-upload-list__item-delete" @click="handleRemove(file)">
-              <i class="el-icon-delete"></i>
-            </span>
-          </span>
-        </div>
+        <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar"  style="height:120px"/>
+        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-      <el-dialog :visible.sync="dialogVisible">
-        <img width="100%" :src="ruleForm.imageUrl" alt />
-      </el-dialog>
     </el-form-item>
     <!-- 文章类别 -->
     <el-form-item label="文章类别" prop="chapter">
@@ -124,15 +112,12 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    handleRemove(file, fileList) {
-      this.ruleForm.imageUrl = '';
+    handleChange(file, fileList) {
+      this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
     },
-    handlePictureCardPreview(file) {
-      this.ruleForm.imageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    handleAvatarupload(file) {
-      this.ruleForm.imageUrl = file.url;
+
+    beforeUpload(file) {
+      return true;
     }
   }
 };

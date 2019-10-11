@@ -49,29 +49,23 @@
         </template>
       </el-table-column>
     </el-table>
-    <div class="block">
-      <el-pagination
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-        :current-page="currentPage"
-        :page-sizes="[3, 4, 5, 6]"
-        :page-size="sizeChange"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="curDate.length"
-      ></el-pagination>
-    </div>
+    <!-- 分页 -->
+    <pagination ref="mychild" :pagesizes="[2,3,4,5]" :dateSource="bgDate" @showDate="showDate" />
   </div>
 </template>
 
 
 <script>
+import pagination from "@/components/pagination";
 export default {
   name: "showStory",
-  components: {},
+  components: {
+    pagination
+  },
   data() {
     return {
       tableData: [],
-      curDate: [
+      bgDate: [
         {
           id: "0",
           category: "言情",
@@ -131,63 +125,17 @@ export default {
           date: new Date().toLocaleString()
         }
       ],
-      //每页条数
-      sizeChange: 3,
-      // 当前页数，支持 .sync 修饰符
-      currentPage: 1,
       search: ""
     };
   },
-  mounted() {
-    this.showPagination(this.currentPage);
-  },
-  methods: {
-    // 每页条数
-    handleSizeChange(val) {
-      this.sizeChange = val;
-      this.handleCurrentChange(this.currentPage);
-      // console.log(`每页 ${this.sizeChange} 条`);
-    },
-    // 当前页
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.showPagination(val);
-      // console.log(`当前页: ${val} ${this.currentPage}`);
-    },
-    // 切换页
-    showPagination(curPage) {
-      this.tableData = [];
-      var bgLen = this.curDate.length;
-      var left = this.sizeChange * (curPage - 1);
-      var right = this.sizeChange * curPage;
-      for (var i = 0; i < bgLen; i++) {
-        if (i >= left && i < right) {
-          this.tableData.push(this.curDate[i]);
-        }
-      }
-    },
-    // 编辑
+  mounted() {},
+  methods: {// 跳转到修改界面
     handleEdit(index, row) {
-      this.$router.push("/updateArticle");
+      // this.$router.push();
     },
-    // 删除
-    handleDelete(id) {
-      var newArray = [];
-      this.curDate.forEach(item => {
-        if (item.id != id) {
-          newArray.push(item);
-        }
-      });
-      this.curDate = newArray;
-      this.showPagination(this.currentPage);
-      // 判断页面的数据是否没有，如果没有就自动跳转到前一页
-      if (
-        Math.ceil(newArray.length / this.sizeChange) != this.currentPage &&
-        this.currentPage != 1
-      ) {
-        console.log(this.currentPage);
-        this.handleCurrentChange(this.currentPage - 1);
-      }
+    // 显示界面数据
+    showDate(response) {
+      this.tableData = response;
     },
     // 弹出框
     open(index, row) {
@@ -197,7 +145,9 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.handleDelete(row.id);
+          console.log(row.id);
+          // 通过this.$refs.mychild来调用子组件的方法
+          this.$refs.mychild.handleDelete(row.id);
           this.$message({
             type: "success",
             message: "删除成功!"

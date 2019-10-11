@@ -7,36 +7,26 @@
       ref="formLabelAlign"
     >
       <!-- 头像 -->
-      <el-form-item label="用户头像">
+      <el-form-item label="用户头像:">
+        <el-input v-model="formLabelAlign.imageUrl" v-if="false"></el-input>
         <el-upload
-          action="#"
-          list-type="picture-card"
+          class="avatar-uploader"
+          ref="upload"
+          :show-file-list="false"
+          action="/index/upload"
+          :before-upload="beforeUpload"
+          :on-change="handleChange"
           :auto-upload="false"
-          :limit="1"
-          :on-change="handleAvatarupload"
+          :data="formLabelAlign"
         >
-          <i slot="default" class="el-icon-plus"></i>
-          <div slot="file" slot-scope="{file}">
-            <img class="el-upload-list__item-thumbnail" :src="formLabelAlign.imageUrl" alt />
-            <span class="el-upload-list__item-actions">
-              <!-- 放大 -->
-              <span class="el-upload-list__item-preview" @click="handlePictureCardPreview(file)">
-                <i class="el-icon-zoom-in"></i>
-              </span>
-              <!-- 删除 -->
-              <span
-                v-if="!disabled"
-                class="el-upload-list__item-delete"
-                @click="handleRemove(file)"
-              >
-                <i class="el-icon-delete"></i>
-              </span>
-            </span>
-          </div>
+          <img
+            v-if="formLabelAlign.imageUrl"
+            :src="formLabelAlign.imageUrl"
+            class="avatar"
+            style="height:120px"
+          />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-        <el-dialog :visible.sync="dialogVisible">
-          <img width="100%" :src="formLabelAlign.imageUrl" alt />
-        </el-dialog>
       </el-form-item>
       <!-- 用户名 -->
       <el-form-item label="用户名">
@@ -104,15 +94,11 @@ export default {
         }
       });
     },
-    handleRemove(file, fileList) {
-      console.log(file, fileList);
+    handleChange(file, fileList) {
+      this.formLabelAlign.imageUrl = URL.createObjectURL(file.raw);
     },
-    handlePictureCardPreview(file) {
-      this.formLabelAlign.imageUrl = file.url;
-      this.dialogVisible = true;
-    },
-    handleAvatarupload(file) {
-      this.formLabelAlign.imageUrl = file.url;
+    beforeUpload(file) {
+      return true;
     }
   }
 };

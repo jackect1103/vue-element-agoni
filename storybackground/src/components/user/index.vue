@@ -15,13 +15,13 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <pagination :pagesizes='[2,3,4,5]' :dateSource='bgDate' @showDate='showDate'/>
+    <pagination ref="mychild" :pagesizes="[2,3,4,5]" :dateSource="bgDate" @showDate="showDate" />
   </div>
 </template>
 
 
 <script>
-import pagination from '@/components/pagination'
+import pagination from "@/components/pagination";
 export default {
   name: "user",
   components: {
@@ -66,12 +66,35 @@ export default {
           birthday: "2000-1-1",
           createDate: new Date().toLocaleString()
         }
-      ],
-      
+      ]
     };
-  },methods: {
-    showDate(response){
-      this.tableData = response
+  },
+  methods: {
+    showDate(response) {
+      this.tableData = response;
+    },
+    // 弹出框
+    open(index, row) {
+      this.$confirm("此操作将永久删除此数据, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          console.log(row.id);
+          // 通过this.$refs.mychild来调用子组件的方法
+          this.$refs.mychild.handleDelete(row.id);
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     }
   }
 };

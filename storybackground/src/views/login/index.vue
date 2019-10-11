@@ -59,7 +59,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          alert(valid);
+          this.$router.push('/showStory')
         } else {
           console.log("error submit!!");
           return false;

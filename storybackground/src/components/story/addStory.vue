@@ -11,15 +11,19 @@
       <el-input v-model="ruleForm.name"></el-input>
     </el-form-item>
     <!-- 小说图片 -->
-    <el-form-item label="小说图片" prop="imageUrl">
+    <el-form-item label="小说图片:">
+      <el-input v-model="ruleForm.imageUrl" v-if="false"></el-input>
       <el-upload
         class="avatar-uploader"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        ref="upload"
         :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
+        action="/index/upload"
+        :before-upload="beforeUpload"
+        :on-change="handleChange"
+        :auto-upload="false"
+        :data="ruleForm"
       >
-        <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar" />
+        <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar"  style="height:120px"/>
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
     </el-form-item>
@@ -121,22 +125,12 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
-    // 获取图片
-    handleAvatarSuccess(res, file) {
+    handleChange(file, fileList) {
       this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
     },
-    // 图片大小及限制图片大小
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === "image/jpeg";
-      const isLt2M = file.size / 1024 / 1024 < 2;
 
-      if (!isJPG) {
-        this.$message.error("上传头像图片只能是 JPG 格式!");
-      }
-      if (!isLt2M) {
-        this.$message.error("上传头像图片大小不能超过 2MB!");
-      }
-      return isJPG && isLt2M;
+    beforeUpload(file) {
+      return true;
     }
   }
 };
