@@ -48,8 +48,7 @@
       </el-form-item>
       <!-- 性别 -->
       <el-form-item label="性别">
-        <span v-if="formLabelAlign.gender">I am a {{ formLabelAlign.gender }}</span>
-        <el-radio-group v-else v-model="sex">
+        <el-radio-group v-model="formLabelAlign.gender">
           <el-radio label="男"></el-radio>
           <el-radio label="女"></el-radio>
         </el-radio-group>
@@ -58,6 +57,15 @@
       <el-form-item label="注册时间">
         <span>{{ formLabelAlign.registerDate}}</span>
       </el-form-item>
+      <el-form-item label="您的格言">
+        <el-input
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 4}"
+          placeholder="请输入内容"
+          v-model="formLabelAlign.motto"
+        ></el-input>
+      </el-form-item>
+      <!-- submit -->
       <el-form-item>
         <el-button type="primary" @click="submitForm('formLabelAlign')">确定</el-button>
       </el-form-item>
@@ -66,7 +74,7 @@
 </template>
 
 <script>
-import { getStore } from "../../utils/storage";
+import { getStore, setStore } from "../../utils/storage";
 export default {
   name: "personlAcount",
   components: {},
@@ -75,7 +83,6 @@ export default {
     return {
       labelPosition: "right",
       formLabelAlign: {},
-      sex: "男",
       dialogVisible: false,
       disabled: false
     };
@@ -89,23 +96,19 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          if (this.formLabelAlign.gender == "undefined") {
-            this.formLabelAlign.gender = this.sex;
-          }
           this.$axios
-            .post("api2/users/adminUpdate", {
-              infoms: this.formLabelAlign
-            })
+            .post("api2/users/adminUpdate", this.formLabelAlign)
             .then(res => {
               var status = res.data.status;
               if (status == 0) {
                 this.$message({
-                  message: "修改信息成功",
+                  message: res.data.msg,
                   type: "success"
                 });
+                setStore("managerInfon", this.formLabelAlign);
               } else {
                 this.$message({
-                  message: "修改信息失败",
+                  message: res.data.msg,
                   type: "waring"
                 });
               }

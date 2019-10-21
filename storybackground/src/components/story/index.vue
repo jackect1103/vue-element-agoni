@@ -71,25 +71,12 @@ export default {
   name: "showStory",
   components: {
     pagination
-  }, 
+  },
   data() {
     return {
       tableData: [],
       bgDate: [],
       search: ""
-      // bgDate: [
-      //   {
-      //     id: "0",
-      //     category: "言情",
-      //     gender: "女孩",
-      //     name: "偏执总裁替嫁妻",
-      //     author: "拈花拂柳",
-      //     chanpter: "152",
-      //     date: new Date().toLocaleString(),
-      //     desc:
-      //       "秦六月，这次，你跑不掉了！十八年前的那笔账是不是该算一下了？”宗铭皓将秦六月压在了墙壁之上，邪气一笑：“用一辈子偿还，怎样？”秦六月惊慌失措的看着这个霸气如魔王的男子，实在想不起来她十八年前到底欠"
-      //   }
-      // ],
     };
   },
   mounted() {
@@ -122,7 +109,8 @@ export default {
           this.$axios
             .post("api2/users/deleteStory", { _id: row._id })
             .then(res => {
-              if (res.data.msg) {
+              var status = res.data.data.status;
+              if (status == 0) {
                 this.$message({
                   type: "success",
                   message: "删除小说成功!"

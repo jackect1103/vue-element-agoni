@@ -45,7 +45,7 @@ export default {
       managerName: ""
     };
   },
-  mounted() {
+  activated() {
     this.managerName = JSON.parse(getStore("managerInfon")).managerName;
   },
   methods: {

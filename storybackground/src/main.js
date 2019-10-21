@@ -24,7 +24,7 @@ Vue.config.productionTip = false
 router.beforeEach((to, from, next) => {
   var result = JSON.parse(getStore('login'))
   if (result) {
-    if (to.path === '/showStory') { //这就是跳出循环的关键
+    if (to.path === '/showStory' || to.path === '/login') { //这就是跳出循环的关键
       next()
     } else {
       next()

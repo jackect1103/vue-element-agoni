@@ -87,7 +87,9 @@ export default {
           this.$axios
             .post("api2/users/deleteArticle", { _id: row._id })
             .then(res => {
-              if (res.data.msg) {
+              var status = res.data.status;
+              console.log("status",res.data);
+              if (status == 0) {
                 this.$message({
                   type: "success",
                   message: "删除文章成功!"
