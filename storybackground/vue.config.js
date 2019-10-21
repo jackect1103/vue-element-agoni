@@ -4,9 +4,11 @@ module.exports = {
         open: process.platform === 'darwin',
         host: '192.168.64.1',
         port: 8081,
-    },
-    // 第三方插件配置
-    pluginOptions: {
-        // ...
+        proxy: {
+            '/api2': {
+                target: 'http://localhost:3000',//设置你调用的接口域名和端口号
+                changeOrigin: true,
+            }
+        }
     }
 }

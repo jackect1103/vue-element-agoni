@@ -3,19 +3,24 @@
     <el-row>
       <el-col :span="8" :offset="3">
         <div id="bgBox">
-          <el-form :model="user" ref="numberValidateForm" label-width="150px" class="demo-ruleForm">
+          <el-form
+            :model="manager"
+            ref="numberValidateForm"
+            label-width="150px"
+            class="demo-ruleForm"
+          >
             <!-- 用户名 -->
             <el-form-item
-              label="userName"
-              prop="name"
+              label="managerName"
+              prop="managerName"
               :rules="[
       { required: true, message: '用户名不能为空'}, ]"
             >
               <el-input
                 type="text"
-                v-model.number="user.name"
+                v-model.number="manager.managerName"
                 autocomplete="off"
-                placeholder="UserName"
+                placeholder="managerName"
               ></el-input>
             </el-form-item>
             <!-- 密码 -->
@@ -28,7 +33,7 @@
             >
               <el-input
                 type="password"
-                v-model.number="user.password"
+                v-model.number="manager.password"
                 autocomplete="off"
                 placeholder="Password"
               ></el-input>
@@ -43,7 +48,7 @@
             >
               <el-input
                 type="password"
-                v-model.number="user.confirmPassword"
+                v-model.number="manager.confirmPassword"
                 autocomplete="off"
                 placeholder="confirmPassword"
               ></el-input>
@@ -62,7 +67,7 @@
           <p>One needs 3 things to be truly happy living in the world: some thing to do, some one to love, some thing to hope for.</p>
           <p>No matter how bad your heart has been broken, the world doesn’t stop for your grief. The sun comes right back up the next day.</p>
           <el-button type="info">
-            <router-link to='/login' tag="span">I have a acount</router-link>
+            <router-link to="/login" tag="span">I have a acount</router-link>
           </el-button>
         </div>
       </el-col>
@@ -73,24 +78,41 @@
 <script>
 export default {
   name: "login",
-  components: {},
   data() {
     return {
-      user: {
-        name: "",
+      manager: {
+        managerName: "",
         password: "",
-        confirmPassword:''
+        confirmPassword: ""
       }
     };
   },
   methods: {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert(valid);
+        if (this.manager.password === this.manager.confirmPassword) {
+          this.$axios
+            .post("/api2/users/adminRegister", {
+              managerName: this.manager.managerName,
+              password: this.manager.password
+            })
+            .then(res => {
+              var status = res.data.status;
+              if (status == 0) {
+                this.$message({
+                  message: "注册成功",
+                  type: "success"
+                });
+                this.$router.push("/login");
+              } else {
+                this.$message({
+                  message: "注册失败",
+                  type: "warning"
+                });
+              }
+            });
         } else {
-          console.log("error submit!!");
-          return false;
+          this.$message.error("密码不一致！");
         }
       });
     },

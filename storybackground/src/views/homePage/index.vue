@@ -15,12 +15,12 @@
             <el-dropdown-item>
               <router-link to="/personalAcount" tag="span">个人中心</router-link>
             </el-dropdown-item>
-            <el-dropdown-item  @click.native="logout">
+            <el-dropdown-item @click.native="logout">
               <span>退出</span>
             </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
-        <span>Agoni</span>
+        <span>{{ managerName }}</span>
       </el-header>
 
       <el-main>
@@ -34,19 +34,35 @@
 
 <script>
 import AsideBg from "@/components/aside";
+import { getStore,removeStore,setStore } from "../../utils/storage";
 export default {
   name: "homePage",
   components: {
     AsideBg
   },
   data() {
-    return {};
+    return {
+      managerName: ""
+    };
+  },
+  mounted() {
+    this.managerName = JSON.parse(getStore("managerInfon")).managerName;
   },
   methods: {
     logout() {
-      this.$router.push({
-        path: "/login"
-      });
+      this.$axios
+        .get("api2/users/adminLogOut")
+        .then(res => {
+          var status = res.data.status;
+          if (status == 0) {
+            removeStore('managerInfon');
+            setStore('login',false);
+            this.$router.push("/login");
+          }
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };
@@ -65,9 +81,9 @@ export default {
 .el-menu {
   height: 100%;
 }
-.el-dropdown-menu__item span{
-  display:inline-block;
-  width:100%;
+.el-dropdown-menu__item span {
+  display: inline-block;
+  width: 100%;
   height: inherit;
   text-align: center;
 }
