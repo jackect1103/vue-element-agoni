@@ -12,24 +12,44 @@
     </el-form-item>
     <!-- 小说图片 -->
     <el-form-item label="小说图片:">
-      <el-input v-model="ruleForm.imageUrl" v-if="false"></el-input>
-      <el-upload
-        class="avatar-uploader"
-        ref="upload"
-        :show-file-list="false"
-        action="/index/upload"
-        :before-upload="beforeUpload"
-        :on-change="handleChange"
-        :auto-upload="false"
-        :data="ruleForm"
-      >
-        <img v-if="ruleForm.imageUrl" :src="ruleForm.imageUrl" class="avatar"  style="height:120px"/>
-        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-      </el-upload>
+      <el-switch v-model="value" active-text="本地上传" inactive-text="链接上传"></el-switch>
+      <div v-if="value">
+        <el-input v-model="ruleForm.storyImg" v-if="false"></el-input>
+        <el-upload
+          class="avatar-uploader"
+          ref="upload"
+          :show-file-list="false"
+          action="/index/upload"
+          :before-upload="beforeUpload"
+          :on-change="handleChange"
+          :auto-upload="false"
+          :data="ruleForm"
+        >
+          <img
+            v-if="ruleForm.storyImg"
+            :src="ruleForm.storyImg"
+            class="avatar"
+            style="height:120px"
+          />
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </div>
+      <!-- 连接上传 -->
+      <div v-else>
+        <el-input placeholder="请输入图片链接" v-model="ruleForm.storyImg" clearable></el-input>
+      </div>
+    </el-form-item>
+    <!-- 小说作者 -->
+    <el-form-item label="小说作者" prop="author">
+      <el-input v-model="ruleForm.author" clearable></el-input>
+    </el-form-item>
+    <!-- 小说主角 -->
+    <el-form-item label="小说主角" prop="role">
+      <el-input v-model="ruleForm.role" clearable></el-input>
     </el-form-item>
     <!-- 小说类别 -->
-    <el-form-item label="小说类别" prop="chapter">
-      <el-select v-model="ruleForm.chapter" placeholder="请选择小说类别">
+    <el-form-item label="小说类别" prop="category">
+      <el-select v-model="ruleForm.category" placeholder="请选择小说类别">
         <el-option label="玄幻" value="Fantasy"></el-option>
         <el-option label="都市" value="urban"></el-option>
         <el-option label="武侠" value="knightErrant"></el-option>
@@ -41,23 +61,15 @@
       </el-select>
     </el-form-item>
     <!-- 小说类型性别  -->
-    <el-form-item label="小说类型性别" prop="gender">
-      <el-select v-model="ruleForm.gender" placeholder="请选择小说类型性别">
+    <el-form-item label="小说类型性别" prop="sex">
+      <el-select v-model="ruleForm.sex" placeholder="请选择小说类型性别">
         <el-option label="男孩" value="boy"></el-option>
         <el-option label="女孩" value="girl"></el-option>
       </el-select>
     </el-form-item>
-    <!-- 小说日期 -->
-    <el-form-item label="小说上线时间" prop="date">
-      <el-date-picker v-model="ruleForm.date" type="date" placeholder="选择日期"></el-date-picker>
-    </el-form-item>
-    <!-- 小说作者 -->
-    <el-form-item label="小说作者" prop="author">
-      <el-input v-model="ruleForm.author"></el-input>
-    </el-form-item>
     <!-- 小说简介 -->
-    <el-form-item label="小说简介" prop="intro">
-      <el-input type="textarea" v-model="ruleForm.intro"></el-input>
+    <el-form-item label="小说简介" prop="desc" placeholder="小说简介">
+      <el-input type="textarea" v-model="ruleForm.desc" autosize clearable></el-input>
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm('ruleForm')">立即创建</el-button>
@@ -72,41 +84,26 @@ export default {
   data() {
     return {
       // 存储数据
-      ruleForm: {
-        name: "",
-        imageUrl: "",
-        chapter: "",
-        gender: "",
-        date: "",
-        author: "",
-        intro: ""
-      },
+      ruleForm: {},
       // 数据规则
       rules: {
         name: [
           { required: true, message: "请输入小说名称", trigger: "blur" },
           { min: 1, max: 15, message: "长度在 1 到 15 个字符", trigger: "blur" }
         ],
-        chapter: [
+        category: [
           { required: true, message: "请选择小说类别", trigger: "change" }
         ],
-        gender: [
+        sex: [
           { required: true, message: "请选择小说类型性别", trigger: "change" }
-        ],
-        date: [
-          {
-            type: "date",
-            required: true,
-            message: "请选择日期",
-            trigger: "change"
-          }
         ],
         author: [
           { required: true, message: "请输入小说作者", trigger: "blur" },
           { min: 1, max: 8, message: "长度在 1 到 8 个字符", trigger: "blur" }
         ],
-        intro: [{ required: true, message: "请填写小说简介", trigger: "blur" }]
-      }
+        desc: [{ required: true, message: "请填写小说简介", trigger: "blur" }]
+      },
+      value: true
     };
   },
   methods: {
@@ -114,7 +111,22 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          console.log(this.ruleForm);
+          this.$axios.post("api2/users/addStory", this.ruleForm).then(res => {
+            var status = res.data.status;
+            console.log(status);
+            if (status == 0) {
+              this.$message({
+                message: res.data.msg,
+                type: "success"
+              });
+              this.$router.push('/showStory');
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: "waring"
+              });
+            }
+          });
         } else {
           console.log("error submit!!");
           return false;
@@ -126,7 +138,7 @@ export default {
       this.$refs[formName].resetFields();
     },
     handleChange(file, fileList) {
-      this.ruleForm.imageUrl = URL.createObjectURL(file.raw);
+      this.ruleForm.storyImg = URL.createObjectURL(file.raw);
     },
 
     beforeUpload(file) {

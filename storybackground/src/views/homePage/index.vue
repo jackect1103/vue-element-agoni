@@ -46,7 +46,7 @@ export default {
     };
   },
   activated() {
-    this.managerName = JSON.parse(getStore("managerInfon")).managerName;
+    this.managerName = getStore("managerInfon").managerName;
   },
   methods: {
     logout() {

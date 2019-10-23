@@ -78,38 +78,29 @@ export default {
       this.$refs[formName].validate(valid => {
         if (valid) {
           console.log(this.manager.managerName + ":" + this.manager.password);
-          var login = JSON.parse(getStore("login"));
-          if (!login) {
-            this.$axios
-              .post("/api2/users/adminLogin", {
-                managerName: this.manager.managerName,
-                password: this.manager.password
-              })
-              .then(res => {
-                var status = res.data.status;
-                console.log(res.data.data.managerInfon);
-                if (status == 0) {
-                  setStore("managerInfon", res.data.data.managerInfon);
-                  setStore("login", true);
-                  this.$message({
-                    message: "登陆成功",
-                    type: "success"
-                  });
-                  this.$router.push("/showStory");
-                } else {
-                  this.$message({
-                    message: "登陆失败",
-                    type: "warning"
-                  });
-                }
-              });
-          } else {
-            this.$router.push('/showStory');
-            this.$message({
-              message: "当前已经登录",
-              type: "success"
+          this.$axios
+            .post("/api2/users/adminLogin", {
+              managerName: this.manager.managerName,
+              password: this.manager.password
+            })
+            .then(res => {
+              var status = res.data.status;
+              console.log(res.data.data.managerInfon);
+              if (status == 0) {
+                setStore("managerInfon", res.data.data.managerInfon);
+                setStore("login", true);
+                this.$message({
+                  message: "登陆成功",
+                  type: "success"
+                });
+                this.$router.push("/showStory");
+              } else {
+                this.$message({
+                  message: "登陆失败",
+                  type: "warning"
+                });
+              }
             });
-          }
         } else {
           console.log("error submit!!");
           return false;

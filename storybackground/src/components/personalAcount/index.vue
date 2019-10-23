@@ -7,7 +7,9 @@
       ref="formLabelAlign"
     >
       <!-- 头像 -->
-      <el-form-item label="用户图片:">
+      <el-form-item label="头像:">
+      <el-switch v-model="value" active-text="本地上传" inactive-text="链接上传"></el-switch>
+      <div v-if="value">
         <el-input v-model="formLabelAlign.img" v-if="false"></el-input>
         <el-upload
           class="avatar-uploader"
@@ -27,7 +29,12 @@
           />
           <i v-else class="el-icon-plus avatar-uploader-icon"></i>
         </el-upload>
-      </el-form-item>
+      </div>
+      <!-- 连接上传 -->
+      <div v-else>
+        <el-input placeholder="请输入图片链接" v-model="formLabelAlign.img" clearable></el-input>
+      </div>
+    </el-form-item>
 
       <!-- 用户名 -->
       <el-form-item label="用户名">
@@ -84,11 +91,12 @@ export default {
       labelPosition: "right",
       formLabelAlign: {},
       dialogVisible: false,
-      disabled: false
+      disabled: false,
+      value:true
     };
   },
   mounted() {
-    this.formLabelAlign = JSON.parse(getStore("managerInfon"));
+    this.formLabelAlign = getStore("managerInfon");
     console.log(this.formLabelAlign.gender);
   },
   methods: {

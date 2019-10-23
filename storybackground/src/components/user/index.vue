@@ -93,7 +93,8 @@ export default {
         })
         .then(res => {
           var status = res.data.status;
-          if (status) {
+          if (status == 0) {
+            this.getAllUsers();
             this.$message({
               type: "success",
               message: res.data.msg

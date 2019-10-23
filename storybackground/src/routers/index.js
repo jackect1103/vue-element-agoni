@@ -34,6 +34,10 @@ export default new Router({
         {
           path: 'addStory',
           component: () => import('@/components/story/addStory'),
+        }, 
+        {
+          path: 'updateStory',
+          component: () => import('@/components/story/updateStory'),
         },
         {
           path: 'showArticle',

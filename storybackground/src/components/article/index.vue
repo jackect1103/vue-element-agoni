@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table
-      :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()) || data.author.toLowerCase().includes(search.toLowerCase()))"
+      :data="tableData.filter(data => !search || data.title.toLowerCase().includes(search.toLowerCase()))"
       style="width: 100%"
     >
       <el-table-column prop="title" label="文章标题" width="180"></el-table-column>
@@ -56,6 +56,7 @@ export default {
     this.getAllArticle();
   },
   methods: {
+    // 获取所有文章
     getAllArticle() {
       this.$axios.get("api2/users/getAllArticle").then(res => {
         var articleDatas = res.data.data.articleDatas;
@@ -68,7 +69,7 @@ export default {
       this.$router.push({
         path: "/updateArticle",
         query: {
-          date: row
+          data: row
         }
       });
     },
@@ -88,7 +89,7 @@ export default {
             .post("api2/users/deleteArticle", { _id: row._id })
             .then(res => {
               var status = res.data.status;
-              console.log("status",res.data);
+              console.log("status", res.data);
               if (status == 0) {
                 this.$message({
                   type: "success",

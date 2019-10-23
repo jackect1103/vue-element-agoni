@@ -51,4 +51,7 @@ export default {
 .iconfont{
   margin-right:15px;
 }
+router-link-active {
+  color: #B3B3B3;
+}
 </style>

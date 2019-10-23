@@ -1,9 +1,6 @@
 <template>
   <div>
-    <el-table
-      :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.author.toLowerCase().includes(search.toLowerCase()))"
-      style="width: 100%"
-    >
+    <el-table :data="searchFun" style="width: 100%">
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-form label-position="left" inline class="demo-table-expand">
@@ -20,8 +17,11 @@
               />
               <span v-else>该小说没上传图片</span>
             </el-form-item>
-            <el-form-item label="小说名作者：">
+            <el-form-item label="小说作者：">
               <span>{{ props.row.author }}</span>
+            </el-form-item>
+            <el-form-item label="小说主演：">
+              <span>{{ props.row.role }}</span>
             </el-form-item>
             <el-form-item label="小说gender：">
               <span>{{ props.row.sex }}</span>
@@ -44,10 +44,15 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="小说ID" prop="_id"></el-table-column>
       <el-table-column label="小说名称" prop="name"></el-table-column>
       <el-table-column label="小说作者" prop="author"></el-table-column>
-      <el-table-column label="小说类别" prop="category"></el-table-column>
+      <el-table-column
+        label="小说类别"
+        prop="category"
+        :filters="filters"
+        :filter-method="filterHandler"
+      ></el-table-column>
+      <el-table-column label="小说主演" prop="role"></el-table-column>
       <!-- 操作删除 -->
       <el-table-column align="right">
         <template slot="header" slot-scope="scope">
@@ -76,13 +81,41 @@ export default {
     return {
       tableData: [],
       bgDate: [],
-      search: ""
+      search: "",
+      filters: [
+        { text: "玄幻", value: "Fantasy" },
+        { text: "都市", value: "urban" },
+        { text: "武侠", value: "knightErrant" },
+        { text: "文学", value: "literature" },
+        { text: "穿越", value: "passThrough" },
+        { text: "悬疑", value: "suspense" },
+        { text: "历史", value: "history" },
+        { text: "游戏", value: "game" }
+      ]
     };
   },
   mounted() {
     this.getAllStory();
   },
+  computed: {
+    // 搜索
+    searchFun() {
+      //filter 里面判断返回的值是‘布尔值’
+      var newArray = this.tableData.filter(data => {
+        if (!this.search) {
+          return true;
+        } else {
+          return (
+            data.name.toLowerCase().includes(this.search.toLowerCase()) ||
+            data.author.toLowerCase().includes(this.search.toLowerCase())
+          );
+        }
+      });
+      return newArray;
+    }
+  },
   methods: {
+    // 获取所有小说
     getAllStory() {
       this.$axios.get("api2/users/getAllStroy").then(res => {
         var storyDatas = res.data.data.storyDatas;
@@ -92,7 +125,12 @@ export default {
     },
     // 跳转到修改界面
     handleEdit(index, row) {
-      // this.$router.push();
+      this.$router.push({
+        path: "/updateStory",
+        query: {
+          data: row
+        }
+      });
     },
     // 显示界面数据(点击分页按钮)
     showDate(response) {
@@ -132,6 +170,11 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    // 筛选类别
+    filterHandler(value, row, column) {
+      const property = column["property"];
+      return row[property] === value;
     }
   }
 };

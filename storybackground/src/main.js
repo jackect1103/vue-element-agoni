@@ -6,7 +6,7 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios'
 import VueLazyload from 'vue-lazyload'
-import { getStore } from "./utils/storage";
+import { getStore, setStore } from "./utils/storage";
 Vue.prototype.$axios = axios;
 
 // import echarts from 'echarts'
@@ -22,12 +22,14 @@ Vue.config.productionTip = false
 
 // 添加路由全局守卫判断是否登录
 router.beforeEach((to, from, next) => {
-  var result = JSON.parse(getStore('login'))
+  var result = getStore('login')
   if (result) {
-    if (to.path === '/showStory' || to.path === '/login') { //这就是跳出循环的关键
+    if (to.path === '/showStory') { //这就是跳出循环的关键
       next()
+    } else if (to.path === '/login') {
+      next('/showStory')
     } else {
-      next()
+      next();
     }
   }
   else {
